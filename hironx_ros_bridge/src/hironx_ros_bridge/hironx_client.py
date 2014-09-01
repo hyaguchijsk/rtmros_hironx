@@ -184,10 +184,13 @@ class HIRONX(HrpsysConfigurator):
             ['seq', "SequencePlayer"],
             ['sh', "StateHolder"],
             ['fk', "ForwardKinematics"],
+            ['ic', "ImpedanceController"],
             ['el', "SoftErrorLimiter"],
             # ['co', "CollisionDetector"],
             ['sc', "ServoController"],
-            ['log', "DataLogger"]
+            ['log', "DataLogger"],
+#            ['rmfo', "RemoveForceSensorLinkOffset"]
+            ['rmfo', "AbsoluteForceSensor"]
             ]
 
     # hand interface

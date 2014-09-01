@@ -25,6 +25,7 @@ example.AutoBalancer.config_file: @ROBOT_PATH@/hrprtc/Robot.conf
 example.Stabilizer.config_file: @ROBOT_PATH@/hrprtc/Robot.conf
 ## Impedance
 example.ImpedanceController.config_file: @ROBOT_PATH@/hrprtc/Robot.conf
+example.RemoveForceSensorLinkOffset.config_file: @ROBOT_PATH@/hrprtc/Robot.conf
 ## SoftErrorLimit
 example.VirtualForceSensor.config_file: @ROBOT_PATH@/hrprtc/Robot.conf
 example.TorqueFilter.config_file: @ROBOT_PATH@/hrprtc/Robot.conf
