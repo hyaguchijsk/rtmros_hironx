@@ -6,6 +6,7 @@
   <env name="RTCTREE_NAMESERVERS" value="$(arg nameserver):$(arg corbaport)" />
   <arg name="USE_ROBOTHARDWARE" default="true" />
   <arg name="USE_SERVOCONTROLLER" default="true" />
+  <arg name="USE_IMPEDANCECONTROLLER" default="true"/>
 
   <include file="$(find hironx_ros_bridge)/launch/hironx_ros_bridge.launch" >
     <arg name="CONF_FILE_COLLISIONDETECT" value="$(arg CONF_FILE_COLLISIONDETECT)" />
@@ -14,6 +15,6 @@
     <arg name="nameserver" value="$(arg nameserver)" />
     <arg name="USE_ROBOTHARDWARE" value="$(arg USE_ROBOTHARDWARE)" />
     <arg name="USE_SERVOCONTROLLER" value="$(arg USE_SERVOCONTROLLER)" />
-    <arg name="USE_IMPEDANCECONTROLLER" value="true"/>
+    <arg name="USE_IMPEDANCECONTROLLER" value="$(arg USE_IMPEDANCECONTROLLER)"/>
   </include>
 </launch>
