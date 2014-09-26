@@ -120,6 +120,13 @@ class HIRONX(HrpsysConfigurator):
         @type url: str
         '''
         HrpsysConfigurator.init(self, robotname=robotname, url=url)
+
+        # connecting ports from hand force sensor to impedance controller
+        # this is temporally code
+        # to avoid version missmatching between real robot and simulation
+        connectPorts(self.rh.port('rhsensor'), self.ic.port('rhsensor'))
+        connectPorts(self.rh.port('lhsensor'), self.ic.port('lhsensor'))
+
         self.setSelfGroups()
 
     def goOffPose(self, tm=7):
@@ -189,8 +196,8 @@ class HIRONX(HrpsysConfigurator):
             # ['co', "CollisionDetector"],
             ['sc', "ServoController"],
             ['log', "DataLogger"],
-#            ['rmfo', "RemoveForceSensorLinkOffset"]
-            ['rmfo', "AbsoluteForceSensor"]
+            # ['rmfo', "RemoveForceSensorLinkOffset"]  # latest version hrpsys
+            # ['rmfo', "AbsoluteForceSensor"]  # old version hrpsys in hiro014 QNX
             ]
 
     # hand interface
@@ -602,3 +609,50 @@ class HIRONX(HrpsysConfigurator):
         print 'Turn on Hand Servo'
         if self.sc_svc:
             self.sc_svc.servoOn()
+
+    def startImpedance(self, arm):
+        ic_sensor_name = 'rhsensor'
+        ic_target_name = 'RARM_JOINT5'
+        if arm == 'rarm':
+            ic_sensor_name = 'rhsensor'
+            ic_target_name = 'RARM_JOINT5'
+        elif arm == 'larm':
+            ic_sensor_name = 'lhsensor'
+            ic_target_name = 'LARM_JOINT5'
+        else:
+            print 'startImpedance: argument must be rarm or larm.'
+            return
+
+        self.ic_svc.setImpedanceControllerParam(
+            OpenHRP.ImpedanceControllerService.impedanceParam(
+                name = ic_sensor_name,
+                base_name = 'CHEST_JOINT0',
+                target_name = ic_target_name,
+                M_p = 100.0,
+                D_p = 100.0,
+                K_p = 100.0,
+                M_r = 100.0,
+                D_r = 2000.0,
+                K_r = 2000.0,
+                ref_force = [0, 0, 0],
+                force_gain = [1, 1, 1],
+                ref_moment = [0, 0, 0],
+                moment_gain = [0, 0, 0],
+                sr_gain = 1.0,
+                avoid_gain = 0.0,
+                reference_gain = 0.0,
+                manipulability_limit = 0.1))
+
+    def stopImpedance(self, arm):
+        ic_sensor_name = 'rhsensor'
+        if arm == 'rarm':
+            ic_sensor_name = 'rhsensor'
+        elif arm == 'larm':
+            ic_sensor_name = 'lhsensor'
+        else:
+            print 'startImpedance: argument must be rarm or larm.'
+            return
+        self.ic_svc.deleteImpedanceControllerAndWait(ic_sensor_name)
+
+    def removeForceSensorOffset(self):
+        self.rh_svc.removeForceSensorOffset()
